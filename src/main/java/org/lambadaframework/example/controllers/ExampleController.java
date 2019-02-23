@@ -1,5 +1,7 @@
 package org.lambadaframework.example.controllers;
 
+import org.apache.commons.codec.DecoderException;
+import org.apache.commons.codec.binary.Hex;
 import org.apache.log4j.Logger;
 
 import javax.ws.rs.Consumes;
@@ -7,6 +9,7 @@ import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
+import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
@@ -43,6 +46,8 @@ public class ExampleController {
         logger.debug("Request got");
         return Response.status(201)
                 .entity(new Entity(name))
+                .header("Access-Control-Allow-Origin", "*")
+                .header("X-Test", "YZ")
                 .build();
     }
 
@@ -78,6 +83,20 @@ public class ExampleController {
         return Response.status(201)
                 .entity(new Entity(requestEntity.name))
                 .build();
+    }
+    
+    @GET
+    @Produces(MediaType.APPLICATION_OCTET_STREAM)
+    @Path("/bits/{data}")
+    /**
+     * This example returns binary data as base64-encoded.
+     * 
+     * @param data
+     * @return
+     * @throws DecoderException
+     */
+    public byte[] exampleBinaryData(@PathParam("data") String data) throws DecoderException {
+    	return Hex.decodeHex(data.toCharArray());
     }
 
 }
