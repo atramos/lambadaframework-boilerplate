@@ -99,4 +99,17 @@ public class ExampleController {
     	return Hex.decodeHex(data.toCharArray());
     }
 
+    /**
+     * We accept text/plain to avoid CORS OPTION pre-flight request.
+     * 
+     * @param data
+     * @return
+     */
+	@Path("/text/{data}")
+	@POST
+	@Consumes(MediaType.TEXT_PLAIN)
+	public Response test(String data) {
+		return Response.status(200).entity(data).build();
+	}
+
 }
